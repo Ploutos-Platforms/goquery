@@ -59,6 +59,20 @@ func TestAddNodesNone(t *testing.T) {
 	assertLength(t, sel.Nodes, 6)
 }
 
+func TestAddNodesSlicedSelectionDoesNotChangeSource(t *testing.T) {
+	sel := Doc().Find("div.row-fluid")
+	assertLength(t, sel.Nodes, 9)
+	origSecond := sel.Nodes[1]
+	sliced := sel.Eq(0)
+	assertLength(t, sliced.Nodes, 1)
+	added := sliced.AddNodes(sel.Nodes[5])
+	assertLength(t, added.Nodes, 2)
+	if sel.Nodes[1] != origSecond {
+		t.Errorf("AddNodes on sliced selection mutated source selection")
+	}
+	assertLength(t, sel.Nodes, 9)
+}
+
 func TestAddNodesRollback(t *testing.T) {
 	sel := Doc().Find(".pvk-content")
 	sel2 := sel.Find("a")
