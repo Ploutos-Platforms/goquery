@@ -35,7 +35,9 @@ func (s *Selection) Union(sel *Selection) *Selection {
 // AddNodes adds the specified nodes to those in the
 // current selection and returns a new Selection object.
 func (s *Selection) AddNodes(nodes ...*html.Node) *Selection {
-	return pushStack(s, appendWithoutDuplicates(s.Nodes, nodes, nil))
+	combined := make([]*html.Node, len(s.Nodes))
+	copy(combined, s.Nodes)
+	return pushStack(s, appendWithoutDuplicates(combined, nodes, nil))
 }
 
 // AndSelf adds the previous set of elements on the stack to the current set.
